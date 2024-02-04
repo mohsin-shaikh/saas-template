@@ -20,6 +20,7 @@ export const settings = async (
     return { error: "Unauthorized" }
   }
 
+  // @ts-expect-error
   const dbUser = await getUserById(user.id);
 
   if (!dbUser) {
