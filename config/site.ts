@@ -1,7 +1,7 @@
 import { SiteConfig } from "@/types"
 
 export const siteConfig: SiteConfig = {
-  name: "imPACT",
+  name: "SaaS Template",
   description: "",
   dateFormate: "MM/dd/yyyy",
 }

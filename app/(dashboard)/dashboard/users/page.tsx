@@ -7,8 +7,8 @@ import { enumToKeyValueArray } from "@/lib/helper"
 // import { getCurrentUser } from "@/lib/session"
 import { DataTable } from "@/components/data-table/data-table"
 
-import { columns } from "./components/columns"
-import CreateModal from "./components/create-modal"
+import { columns } from "./_components/columns"
+import CreateModal from "./_components/create-modal"
 import { currentUser } from "@/lib/auth"
 
 export const metadata: Metadata = {
