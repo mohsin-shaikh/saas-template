@@ -28,7 +28,7 @@ export default function Icon() {
           // borderRadius: '50px'
         }}
       >
-        I
+        Z
       </div>
     ),
     // ImageResponse options
