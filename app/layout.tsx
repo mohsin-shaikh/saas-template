@@ -6,6 +6,8 @@ import { auth } from '@/auth';
 import '@/styles/globals.css';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/theme-provider';
+import ProgressBar from '@/components/progress-bar';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -46,8 +48,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             fontHeading.variable
           )}
         >
-          <Toaster />
-          {children}
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+            <ProgressBar />
+            <Toaster />
+            {children}
+          </ThemeProvider>
         </body>
       </html>
     </SessionProvider>
