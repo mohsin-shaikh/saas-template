@@ -81,3 +81,32 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
 }
+
+model Task {
+  id       String       @id @default(cuid())
+  code     String
+  title    String
+  status   TaskStatus   @default(todo)
+  label    TaskLabel    @default(bug)
+  priority TaskPriority @default(low)
+}
+
+enum TaskStatus {
+  todo
+  in_progress
+  done
+  canceled
+}
+
+enum TaskLabel {
+  bug
+  feature
+  enhancement
+  documentation
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+}

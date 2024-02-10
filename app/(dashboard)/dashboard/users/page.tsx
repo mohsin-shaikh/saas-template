@@ -5,7 +5,7 @@ import { UserRole } from "@prisma/client"
 import { db } from "@/lib/db"
 import { enumToKeyValueArray } from "@/lib/helper"
 // import { getCurrentUser } from "@/lib/session"
-import { DataTable } from "@/components/data-table/data-table"
+import { DataTable } from "@/components/data-table-old/data-table"
 
 import { columns } from "./_components/columns"
 import CreateModal from "./_components/create-modal"

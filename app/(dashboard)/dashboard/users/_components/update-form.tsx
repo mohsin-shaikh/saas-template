@@ -133,7 +133,7 @@ export function UpdateForm<TData>({ setIsOpen, row }: FormType<TData>) {
                     <SelectValue placeholder='Role' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='MANAGER'>MANAGER</SelectItem>
+                    <SelectItem value='USER'>USER</SelectItem>
                     <SelectItem value='ADMIN'>ADMIN</SelectItem>
                   </SelectContent>
                 </Select>

@@ -6,6 +6,10 @@ export const links = [
   {
     link: "/dashboard/users",
     name: "Users",
-    isNotAllowed: ["MANAGER"],
+    isNotAllowed: ["USER"],
+  },
+  {
+    link: "/dashboard/tasks",
+    name: "Tasks",
   },
 ]

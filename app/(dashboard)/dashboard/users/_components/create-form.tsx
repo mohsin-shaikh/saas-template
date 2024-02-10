@@ -6,7 +6,6 @@ import * as z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { toast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
@@ -26,6 +25,8 @@ import {
 } from '@/components/ui/select';
 import { createUserSchema } from '@/schemas/user';
 import { useRouter } from 'next/navigation';
+import { createUser } from '@/actions/users';
+import { toast } from 'sonner';
 
 type UserFormValues = z.infer<typeof createUserSchema>;
 
@@ -47,28 +48,16 @@ export function CreateForm({ setIsOpen }: FormType) {
 
   async function onSubmit(data: UserFormValues) {
     setLoading(true);
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
 
-    if (!response?.ok) {
-      return toast({
-        title: 'Something went wrong.',
-        description: 'Your post was not created. Please try again.',
-        variant: 'destructive',
-      });
+    const response = await createUser(data);
+
+    if (response?.error) {
+      toast(response.error);
+      setLoading(false);
+      return false;
     }
 
-    const user = await response.json();
-
-    toast({
-      title: 'Success',
-      description: 'Your message has been sent.',
-    });
+    toast(response.success);
     // This forces a cache invalidation.
     router.refresh();
 
@@ -133,7 +122,7 @@ export function CreateForm({ setIsOpen }: FormType) {
                     <SelectValue placeholder='Role' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='MANAGER'>MANAGER</SelectItem>
+                    <SelectItem value='USER'>USER</SelectItem>
                     <SelectItem value='ADMIN'>ADMIN</SelectItem>
                   </SelectContent>
                 </Select>

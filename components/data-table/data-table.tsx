@@ -1,21 +1,13 @@
-"use client"
-
 import * as React from "react"
+import type {
+  DataTableFilterableColumn,
+  DataTableSearchableColumn,
+} from "@/types"
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  type ColumnDef,
+  type Table as TanstackTable,
 } from "@tanstack/react-table"
-import { LucideIcon } from "lucide-react"
 
 import {
   Table,
@@ -25,87 +17,100 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { DataTablePagination } from "@/components/data-table/data-table-pagination"
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
 
-type TFacedFilters = {
-  column?: string
-  title?: string
-  options: {
-    label: string
-    value: string
-    icon?: LucideIcon
-  }[]
-}
+import { DataTableAdvancedToolbar } from "./advanced/data-table-advanced-toolbar"
+import { DataTableFloatingBar } from "./data-table-floating-bar"
+import { DataTablePagination } from "./data-table-pagination"
+import { DataTableToolbar } from "./data-table-toolbar"
 
 interface DataTableProps<TData, TValue> {
+  /**
+   * The table instance returned from useDataTable hook with pagination, sorting, filtering, etc.
+   * @type TanstackTable<TData>
+   */
+  dataTable: TanstackTable<TData>
+
+  /**
+   * The columns of the table
+   * @default []
+   * @type ColumnDef<TData, TValue>[]
+   */
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  filter?: string
-  facedFilters?: TFacedFilters[]
+
+  /**
+   * The searchable columns of the table
+   * @default []
+   * @type {id: keyof TData, title: string}[]
+   * @example searchableColumns={[{ id: "title", title: "titles" }]}
+   */
+  searchableColumns?: DataTableSearchableColumn<TData>[]
+
+  /**
+   * The filterable columns of the table. When provided, renders dynamic faceted filters, and the advancedFilter prop is ignored.
+   * @default []
+   * @type {id: keyof TData, title: string, options: { label: string, value: string, icon?: React.ComponentType<{ className?: string }> }[]
+   * @example filterableColumns={[{ id: "status", title: "Status", options: ["todo", "in-progress", "done", "canceled"]}]}
+   */
+  filterableColumns?: DataTableFilterableColumn<TData>[]
+
+  /**
+   * Show notion like filters when enabled
+   * @default false
+   * @type boolean
+   */
+  advancedFilter?: boolean
+
+  /**
+   * The content to render in the floating bar on row selection, at the bottom of the table. When null, the floating bar is not rendered.
+   * The datTable instance is passed as a prop to the floating bar content.
+   * @default null
+   * @type React.ReactNode | null
+   * @example floatingBarContent={TasksTableFloatingBarContent(dataTable)}
+   */
+  floatingBarContent?: React.ReactNode | null
+
+  /**
+   * The action to delete rows
+   * @default undefined
+   * @type React.MouseEventHandler<HTMLButtonElement> | undefined
+   * @example deleteRowsAction={(event) => deleteSelectedRows(dataTable, event)}
+   */
+  deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export function DataTable<TData, TValue>({
+  dataTable,
   columns,
-  data,
-  filter,
-  facedFilters,
+  searchableColumns = [],
+  filterableColumns = [],
+  advancedFilter = false,
+  floatingBarContent,
+  deleteRowsAction,
 }: DataTableProps<TData, TValue>) {
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-    },
-    enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
-
   return (
-    <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        filter={filter}
-        facedFilters={facedFilters}
-      />
+    <div className="w-full space-y-2.5 overflow-auto">
+      {advancedFilter ? (
+        <DataTableAdvancedToolbar
+          dataTable={dataTable}
+          filterableColumns={filterableColumns}
+          searchableColumns={searchableColumns}
+        />
+      ) : (
+        <DataTableToolbar
+          table={dataTable}
+          filterableColumns={filterableColumns}
+          searchableColumns={searchableColumns}
+          deleteRowsAction={deleteRowsAction}
+        />
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow
-                key={headerGroup.id}
-                className={`whitespace-nowrap`} // FIXME: MS - nowrap
-              >
+            {dataTable.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead
-                      key={header.id}
-                      className={
-                        header.id.endsWith("actions")
-                          ? "sticky right-0 bg-background"
-                          : ""
-                      } // FIXME: MS - Fix action column to right
-                    >
+                    <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -119,22 +124,14 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
+            {dataTable.getRowModel().rows?.length ? (
+              dataTable.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className={`whitespace-nowrap`} // FIXME: MS - nowrap
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={
-                        cell.id.endsWith("actions")
-                          ? "sticky right-0 bg-background"
-                          : ""
-                      } // FIXME: MS - Fix action column to right
-                    >
+                    <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -156,7 +153,14 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <div className="space-y-2.5">
+        <DataTablePagination table={dataTable} />
+        {floatingBarContent ? (
+          <DataTableFloatingBar table={dataTable}>
+            {floatingBarContent}
+          </DataTableFloatingBar>
+        ) : null}
+      </div>
     </div>
   )
 }
