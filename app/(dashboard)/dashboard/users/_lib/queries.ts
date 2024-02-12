@@ -6,12 +6,12 @@ import type { SearchParams } from '@/types';
 
 import { filterColumn } from '@/lib/filter-column';
 import { searchParamsSchema } from '@/schemas/page-params';
-import { Task } from '@prisma/client';
+import { User } from '@prisma/client';
 
-export async function getTasks(searchParams: SearchParams) {
+export async function getUsers(searchParams: SearchParams) {
   noStore();
   try {
-    const { page, per_page, sort, title, status, priority, operator } =
+    const { page, per_page, sort, email, role, operator } =
       searchParamsSchema.parse(searchParams);
 
     // Fallback page for invalid page numbers
@@ -25,51 +25,42 @@ export async function getTasks(searchParams: SearchParams) {
     const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0;
     // Column and order to sort by
     // Splitting the sort string by "." to get the column and order
-    // Example: "title.desc" => ["title", "desc"]
+    // Example: "email.desc" => ["email", "desc"]
     const [column, order] = (sort?.split('.') as [
-      keyof Task | undefined,
+      keyof User | undefined,
       'asc' | 'desc' | undefined
-    ]) ?? ['title', 'desc'];
+    ]) ?? ['email', 'desc'];
 
-    const statuses = (status?.split('.') as Task['status'][]) ?? [];
+    const roles = (role?.split('.') as User['role'][]) ?? [];
 
-    const priorities = (priority?.split('.') as Task['priority'][]) ?? [];
-
-    const getAllTasks = db.task.findMany({
+    const getAllUsers = db.user.findMany({
       take: limit,
       skip: offset,
       where:
         !operator || operator === 'and'
           ? {
-              // Filter tasks by title
-              title: title
+              // Filter users by email
+              email: email
                 ? filterColumn({
-                    value: title,
+                    value: email,
                   })
                 : undefined,
-              // Filter tasks by status
-              status: statuses.length > 0 ? { in: statuses } : undefined,
-              // Filter tasks by priority
-              priority: priorities.length > 0 ? { in: priorities } : undefined,
+              // Filter users by role
+              role: roles.length > 0 ? { in: roles } : undefined,
             }
           : {
               OR: [
                 {
-                  // Filter tasks by title
-                  title: title
+                  // Filter users by email
+                  email: email
                     ? filterColumn({
-                        value: title,
+                        value: email,
                       })
                     : undefined,
                 },
                 {
-                  // Filter tasks by status
-                  status: statuses.length > 0 ? { in: statuses } : undefined,
-                },
-                {
-                  // Filter tasks by priority
-                  priority:
-                    priorities.length > 0 ? { in: priorities } : undefined,
+                  // Filter users by role
+                  role: roles.length > 0 ? { in: roles } : undefined,
                 },
               ],
             },
@@ -80,40 +71,33 @@ export async function getTasks(searchParams: SearchParams) {
         : { id: 'desc' },
     });
 
-    const getAllTasksCount = db.task.aggregate({
+    const getAllUsersCount = db.user.aggregate({
       _count: true,
       where:
         !operator || operator === 'and'
           ? {
-              // Filter tasks by title
-              title: title
+              // Filter users by email
+              email: email
                 ? filterColumn({
-                    value: title,
+                    value: email,
                   })
                 : undefined,
-              // Filter tasks by status
-              status: statuses.length > 0 ? { in: statuses } : undefined,
-              // Filter tasks by priority
-              priority: priorities.length > 0 ? { in: priorities } : undefined,
+              // Filter users by role
+              role: roles.length > 0 ? { in: roles } : undefined,
             }
           : {
               OR: [
                 {
-                  // Filter tasks by title
-                  title: title
+                  // Filter users by email
+                  email: email
                     ? filterColumn({
-                        value: title,
+                        value: email,
                       })
                     : undefined,
                 },
                 {
-                  // Filter tasks by status
-                  status: statuses.length > 0 ? { in: statuses } : undefined,
-                },
-                {
-                  // Filter tasks by priority
-                  priority:
-                    priorities.length > 0 ? { in: priorities } : undefined,
+                  // Filter users by role
+                  role: roles.length > 0 ? { in: roles } : undefined,
                 },
               ],
             },
@@ -121,13 +105,13 @@ export async function getTasks(searchParams: SearchParams) {
 
     // Transaction is used to ensure both queries are executed in a single transaction
     const [data, count] = await db.$transaction([
-      getAllTasks,
-      getAllTasksCount,
+      getAllUsers,
+      getAllUsersCount,
     ]);
 
     // console.log({ c: count._count });
-    const pageCount = Math.ceil(count._count / limit)
-    
+    const pageCount = Math.ceil(count._count / limit);
+
     return { data, pageCount };
   } catch (err) {
     console.log(err);

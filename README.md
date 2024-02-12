@@ -22,6 +22,11 @@ This is a repository for SaaS Template - Advanced Guide (2024)
 - **Validation:** [Zod](https://zod.dev)
 - **Auth** [Next Auth v5 (Auth.JS)](https://authjs.dev)
 
+### Bugs / Issues
+
+- [ ] Use uniformed icons
+- [ ] Move to New York Style
+
 ### Features
 
 - [x] Server-side pagination, sorting, and filtering (`useTable` hook)

@@ -11,8 +11,6 @@ export interface TaskPageProps {
   searchParams: SearchParams;
 }
 
-
-
 export default function TaskPage({ searchParams }: TaskPageProps) {
   // seedTasks({});
   const tasksPromise = getTasks(searchParams);

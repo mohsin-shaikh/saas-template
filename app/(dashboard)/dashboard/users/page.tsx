@@ -1,69 +1,39 @@
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { UserRole } from "@prisma/client"
+import * as React from 'react';
+import type { SearchParams } from '@/types';
 
-import { db } from "@/lib/db"
-import { enumToKeyValueArray } from "@/lib/helper"
-// import { getCurrentUser } from "@/lib/session"
-import { DataTable } from "@/components/data-table-old/data-table"
+import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 
-import { columns } from "./_components/columns"
-import CreateModal from "./_components/create-modal"
-import { currentUser } from "@/lib/auth"
+import { UsersTable } from './_components/users-table';
+import { getUsers } from './_lib/queries';
+import CreateModal from './_components/create-modal';
 
-export const metadata: Metadata = {
-  title: "Users",
-  description: "User Management",
+export interface UsersPageProps {
+  searchParams: SearchParams;
 }
 
-async function getUsers() {
-  const allUsers = await db.user.findMany({
-    orderBy: { id: "desc" },
-  })
-  return allUsers
-}
-
-// export const revalidate = 0
-
-export default async function UserPage() {
-  // const user = await getCurrentUser()
-  const user = await currentUser();
-  // @ts-expect-error
-  if (user.role !== "ADMIN") {
-    // return notFound()
-    return (
-      <>
-        <div className="h-[calc(100vh-64px-32px)] flex-1 flex-col space-y-4">
-          <div className="h-full flex items-center justify-center">
-            <h2 className="text-2xl font-bold tracking-tight">401 | Unauthorized</h2>
-          </div>
-        </div>
-      </>
-    )
-  }
-
-  const users = await getUsers()
+export default function UsersPage({ searchParams }: UsersPageProps) {
+  const usersPromise = getUsers(searchParams);
 
   return (
     <>
-      <div className="h-full flex-1 flex-col space-y-4">
-        <div className="flex flex-row flex-wrap items-center justify-between space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight">Users</h2>
+      <div className='h-full flex-1 flex-col space-y-4'>
+        <div className='flex flex-row flex-wrap items-center justify-between space-y-2'>
+          <h2 className='text-2xl font-bold tracking-tight'>Users</h2>
           <CreateModal />
         </div>
-        <DataTable
-          data={users}
-          columns={columns}
-          filter="email"
-          facedFilters={[
-            {
-              column: "role",
-              title: "Role",
-              options: enumToKeyValueArray(UserRole),
-            },
-          ]}
-        />
+        <React.Suspense
+          fallback={
+            <DataTableSkeleton columnCount={4} filterableColumnCount={2} />
+          }
+        >
+          {/**
+           * The `UsersTable` component is used to render the `DataTable` component within it.
+           * This is done because the table columns need to be memoized, and the `useDataTable` hook needs to be called in a client component.
+           * By encapsulating the `DataTable` component within the `usertable` component, we can ensure that the necessary logic and state management is handled correctly.
+           */}
+          <UsersTable usersPromise={usersPromise} />
+        </React.Suspense>
       </div>
     </>
-  )
+  );
 }

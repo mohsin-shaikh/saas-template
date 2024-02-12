@@ -1,5 +1,4 @@
 import { notFound, redirect } from 'next/navigation';
-import { Menu } from 'lucide-react';
 
 import { siteConfig } from '@/config/site';
 import { Icons } from '@/components/icons';
