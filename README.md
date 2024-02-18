@@ -1,6 +1,6 @@
 # SaaS Template - Advanced Guide (2024)
 
-<!-- ![image](https://github.com/mohsin-shaikh/saas-template/assets/12345/d76f776-dsdsd-dsdsd) -->
+![image](https://github.com/mohsin-shaikh/saas-template/public/saas-template.png)
 
 This is a repository for SaaS Template - Advanced Guide (2024)
 
@@ -21,11 +21,6 @@ This is a repository for SaaS Template - Advanced Guide (2024)
 - **ORM:** [Prisma JS](https://www.prisma.io)
 - **Validation:** [Zod](https://zod.dev)
 - **Auth** [Next Auth v5 (Auth.JS)](https://authjs.dev)
-
-### Bugs / Issues
-
-- [ ] Use uniformed icons
-- [ ] Move to New York Style
 
 ### Features
 
@@ -137,3 +132,8 @@ Running commands with npm `npm run [command]`
 | command         | description                              |
 | :-------------- | :--------------------------------------- |
 | `dev`           | Starts a development instance of the app |
+
+### Bugs / Issues
+
+- [ ] Use uniformed icons
+- [ ] Table selection should reset on-page changes in data-table

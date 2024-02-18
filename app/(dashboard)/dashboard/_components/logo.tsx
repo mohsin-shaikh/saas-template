@@ -1,11 +1,12 @@
 import { Icons } from '@/components/icons';
+import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
 
-interface LogoProps {
+interface ILogo {
   isCollapsed: boolean;
 }
 
-export default function Logo({ isCollapsed }: LogoProps) {
+export default function Logo({ isCollapsed }: ILogo) {
   return (
     <div
       className={cn(
@@ -22,7 +23,7 @@ export default function Logo({ isCollapsed }: LogoProps) {
         )}
       >
         <Icons.logo />
-        <span className={cn('ml-2', isCollapsed && 'hidden')}>Logo</span>
+        <span className={cn('ml-2', isCollapsed && 'hidden')}>{siteConfig.name}</span>
       </div>
     </div>
   );

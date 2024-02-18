@@ -17,7 +17,7 @@ import { useCurrentUser } from '@/hooks/use-current-user';
 import Logo from './logo';
 import { MobileNav } from './mobile-nav';
 
-interface DashboardShellProps {
+interface IDashboardShell {
   defaultLayout: number[] | undefined;
   defaultCollapsed?: boolean;
   navCollapsedSize?: number;
@@ -29,7 +29,7 @@ export function DashboardShell({
   defaultCollapsed = false,
   navCollapsedSize = 4,
   children,
-}: DashboardShellProps) {
+}: IDashboardShell) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const user = useCurrentUser();
 
