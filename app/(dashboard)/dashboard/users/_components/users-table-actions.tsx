@@ -1,37 +1,33 @@
-import * as React from 'react';
-import { unstable_noStore as noStore } from 'next/cache';
-import {
-  ArrowUpIcon,
-  CheckCircledIcon,
-  TrashIcon,
-} from '@radix-ui/react-icons';
-import { SelectTrigger } from '@radix-ui/react-select';
-import { type Table } from '@tanstack/react-table';
-import { toast } from 'sonner';
+import * as React from "react"
+import { unstable_noStore as noStore } from "next/cache"
+import { User, UserRole } from "@prisma/client"
+import { ArrowUpIcon, CheckCircledIcon, TrashIcon } from "@radix-ui/react-icons"
+import { SelectTrigger } from "@radix-ui/react-select"
+import { type Table } from "@tanstack/react-table"
+import { toast } from "sonner"
 
-import { catchError } from '@/lib/catch-error';
-import { Button } from '@/components/ui/button';
+import { catchError } from "@/lib/catch-error"
+import { enumToKeyValueArray } from "@/lib/helper"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-} from '@/components/ui/select';
+} from "@/components/ui/select"
 
-import { deleteUser, updateUserRole } from '../_lib/actions';
-import { User, UserRole } from '@prisma/client';
-import { enumToKeyValueArray } from '@/lib/helper';
+import { deleteUser, updateUserRole } from "../_lib/actions"
 
 export function deleteSelectedRows(
   table: Table<User>,
   event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
 ) {
-  event?.preventDefault();
+  event?.preventDefault()
   const selectedRows = table.getFilteredSelectedRowModel().rows as {
-    original: User;
-  }[];
+    original: User
+  }[]
 
-  noStore();
+  noStore()
   toast.promise(
     Promise.all(
       selectedRows.map(async (row) =>
@@ -41,66 +37,66 @@ export function deleteSelectedRows(
       )
     ),
     {
-      loading: 'Deleting...',
+      loading: "Deleting...",
       success: () => {
-        return 'Users deleted successfully.';
+        return "Users deleted successfully."
       },
       error: (err: unknown) => {
-        return catchError(err);
+        return catchError(err)
       },
     }
-  );
+  )
 }
 
 export function updateUsersRole(table: Table<User>, status: string) {
   const selectedRows = table.getFilteredSelectedRowModel().rows as unknown as {
-    original: User;
-  }[];
+    original: User
+  }[]
 
-  noStore();
+  noStore()
   toast.promise(
     Promise.all(
       selectedRows.map(async (row) =>
         updateUserRole({
           id: row.original.id,
-          role: status as User['role'],
+          role: status as User["role"],
         })
       )
     ),
     {
-      loading: 'Updating...',
+      loading: "Updating...",
       success: () => {
-        return 'Users updated successfully.';
+        return "Users updated successfully."
       },
       error: (err: unknown) => {
-        return catchError(err);
+        return catchError(err)
       },
     }
-  );
+  )
 }
 
 export function UsersTableFloatingBarContent(table: Table<User>) {
   return (
-    <div className='justify-between gap-2 align-middle'>
+    <div className="justify-between gap-2 align-middle">
       <Select onValueChange={(value) => updateUsersRole(table, value)}>
         <SelectTrigger asChild>
           <Button
-            aria-label='Update role for selected rows'
-            title='Update Role'
-            variant='ghost'
-            size='icon'
-            className='size-7 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground'
+            aria-label="Update role for selected rows"
+            title="Update Role"
+            variant="ghost"
+            size="icon"
+            className="size-7 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground"
           >
-            <CheckCircledIcon className='size-4' aria-hidden='true' />
+            <CheckCircledIcon className="size-4" aria-hidden="true" />
           </Button>
         </SelectTrigger>
-        <SelectContent align='center'>
+        <SelectContent align="center">
           <SelectGroup>
             {enumToKeyValueArray(UserRole).map((data) => (
               <SelectItem
                 key={data.value}
                 value={data.value}
-                className='capitalize'
+                className="capitalize"
               >
                 {data.label}
               </SelectItem>
@@ -109,18 +105,18 @@ export function UsersTableFloatingBarContent(table: Table<User>) {
         </SelectContent>
       </Select>
       <Button
-        title='Delete'
-        variant='ghost'
-        size='icon'
-        className='size-7'
+        title="Delete"
+        variant="ghost"
+        size="icon"
+        className="size-7"
         onClick={(event) => {
-          table.toggleAllPageRowsSelected(false);
-          deleteSelectedRows?.(table, event);
+          table.toggleAllPageRowsSelected(false)
+          deleteSelectedRows?.(table, event)
         }}
       >
-        <TrashIcon className='size-4' aria-hidden='true' />
-        <span className='sr-only'>Delete</span>
+        <TrashIcon className="size-4" aria-hidden="true" />
+        <span className="sr-only">Delete</span>
       </Button>
     </div>
-  );
+  )
 }

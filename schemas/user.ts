@@ -1,6 +1,7 @@
-import * as z from 'zod';
-import { enumToArray } from '@/lib/helper';
-import { UserRole } from '@prisma/client';
+import { UserRole } from "@prisma/client"
+import * as z from "zod"
+
+import { enumToArray } from "@/lib/helper"
 
 export const createUserSchema = z.object({
   name: z.string().min(3).max(32),
@@ -9,7 +10,7 @@ export const createUserSchema = z.object({
   // // @ts-expect-error
   // role: z.enum(enumToArray(UserRole))
   role: z.enum([UserRole.ADMIN, UserRole.USER]),
-});
+})
 
 export const updateUserSchema = z.object({
   name: z.string().min(3).max(32),
@@ -18,8 +19,8 @@ export const updateUserSchema = z.object({
   // // @ts-expect-error
   // role: z.enum(enumToArray(UserRole))
   role: z.enum([UserRole.ADMIN, UserRole.USER]),
-});
+})
 
 export const deleteUserSchema = z.object({
   id: z.string(),
-});
+})

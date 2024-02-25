@@ -1,24 +1,24 @@
-import { DashboardShell } from './_components/dashboard-shell';
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers"
+
+import { DashboardShell } from "./_components/dashboard-shell"
 
 interface DashboardLayoutProps {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   // const user = await currentUser();
 
-  const layout = cookies().get('react-resizable-panels:layout');
-  const collapsed = cookies().get('react-resizable-panels:collapsed');
-  console.log({ collapsed });
+  const layout = cookies().get("react-resizable-panels:layout")
+  const collapsed = cookies().get("react-resizable-panels:collapsed")
   const defaultLayout =
-    layout && layout.value !== 'undefined'
+    layout && layout.value !== "undefined"
       ? JSON.parse(layout.value)
-      : undefined;
+      : undefined
   const defaultCollapsed =
-    collapsed && collapsed.value !== 'undefined'
+    collapsed && collapsed.value !== "undefined"
       ? JSON.parse(collapsed.value)
-      : undefined;
+      : undefined
 
   return (
     <>
@@ -27,11 +27,11 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
         defaultCollapsed={defaultCollapsed}
       >
         <main className={`flex min-h-full w-full`}>
-          <div className='w-full bg-background p-4'>{children}</div>
+          <div className="w-full bg-background p-4">{children}</div>
         </main>
       </DashboardShell>
     </>
-  );
-};
+  )
+}
 
-export default DashboardLayout;
+export default DashboardLayout

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { Task } from "@prisma/client"
 // import { type Task } from "@/db/schema"
 import { type ColumnDef } from "@tanstack/react-table"
 
@@ -17,7 +18,6 @@ import {
   filterableColumns,
   searchableColumns,
 } from "./tasks-table-column-def"
-import { Task } from "@prisma/client"
 
 interface TasksTableProps {
   tasksPromise: ReturnType<typeof getTasks>

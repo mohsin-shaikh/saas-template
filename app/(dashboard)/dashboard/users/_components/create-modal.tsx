@@ -1,6 +1,10 @@
-'use client';
+"use client"
 
-import { buttonVariants } from '@/components/ui/button';
+import { useState } from "react"
+import { Plus } from "lucide-react"
+
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -8,7 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
@@ -18,21 +22,19 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@/components/ui/drawer';
-import { Plus } from 'lucide-react';
-import { CreateForm } from './create-form';
-import { useState } from 'react';
-import { useMediaQuery } from '@/hooks/use-media-query';
+} from "@/components/ui/drawer"
+
+import { CreateForm } from "./create-form"
 
 const CreateModal = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [isOpen, setIsOpen] = useState(false)
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger className={buttonVariants()}>
-          <Plus className='w-4 h-4 mr-1' /> Create
+          <Plus className="w-4 h-4 mr-1" /> Create
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -43,13 +45,13 @@ const CreateModal = () => {
           </DialogHeader>
         </DialogContent>
       </Dialog>
-    );
+    )
   }
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerTrigger className={buttonVariants()}>
-        <Plus className='w-4 h-4 mr-1' /> Create
+        <Plus className="w-4 h-4 mr-1" /> Create
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -67,7 +69,7 @@ const CreateModal = () => {
     </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
-  );
-};
+  )
+}
 
-export default CreateModal;
+export default CreateModal

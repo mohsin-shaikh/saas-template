@@ -1,24 +1,24 @@
-import * as React from 'react';
-import type { SearchParams } from '@/types';
+import * as React from "react"
+import type { SearchParams } from "@/types"
 
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 
-import { UsersTable } from './_components/users-table';
-import { getUsers } from './_lib/queries';
-import CreateModal from './_components/create-modal';
+import CreateModal from "./_components/create-modal"
+import { UsersTable } from "./_components/users-table"
+import { getUsers } from "./_lib/queries"
 
 export interface UsersPageProps {
-  searchParams: SearchParams;
+  searchParams: SearchParams
 }
 
 export default function UsersPage({ searchParams }: UsersPageProps) {
-  const usersPromise = getUsers(searchParams);
+  const usersPromise = getUsers(searchParams)
 
   return (
     <>
-      <div className='h-full flex-1 flex-col space-y-4'>
-        <div className='flex flex-row flex-wrap items-center justify-between space-y-2'>
-          <h2 className='text-2xl font-bold tracking-tight'>Users</h2>
+      <div className="h-full flex-1 flex-col space-y-4">
+        <div className="flex flex-row flex-wrap items-center justify-between space-y-2">
+          <h2 className="text-2xl font-bold tracking-tight">Users</h2>
           <CreateModal />
         </div>
         <React.Suspense
@@ -35,5 +35,5 @@ export default function UsersPage({ searchParams }: UsersPageProps) {
         </React.Suspense>
       </div>
     </>
-  );
+  )
 }

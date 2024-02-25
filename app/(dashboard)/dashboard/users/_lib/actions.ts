@@ -1,19 +1,19 @@
-'use server';
+"use server"
 
-import { revalidatePath } from 'next/cache';
-import type { z } from 'zod';
-import type {
-  updateUserRoleSchema,
-} from './validations';
-import { db } from '@/lib/db';
-import { currentUser } from '@/lib/auth';
-import { deleteUserSchema } from '@/schemas/user';
+import { revalidatePath } from "next/cache"
+import { deleteUserSchema } from "@/schemas/user"
+import type { z } from "zod"
+
+import { currentUser } from "@/lib/auth"
+import { db } from "@/lib/db"
+
+import type { updateUserRoleSchema } from "./validations"
 
 export async function updateUserRole({
   id,
   role,
 }: z.infer<typeof updateUserRoleSchema>) {
-  console.log('updateUserRoleSchemaAction', id, role);
+  console.log("updateUserRoleSchemaAction", id, role)
 
   await db.user.update({
     where: {
@@ -22,9 +22,9 @@ export async function updateUserRole({
     data: {
       role: role,
     },
-  });
+  })
 
-  revalidatePath('/');
+  revalidatePath("/")
 }
 
 // export async function deleteUser(input: { id: string }) {
@@ -38,19 +38,19 @@ export async function updateUserRole({
 // }
 
 export const deleteUser = async (values: z.infer<typeof deleteUserSchema>) => {
-  const validatedFields = deleteUserSchema.safeParse(values);
+  const validatedFields = deleteUserSchema.safeParse(values)
 
   if (!validatedFields.success) {
-    throw new Error('Invalid fields!'); 
+    throw new Error("Invalid fields!")
     // return { error: 'Invalid fields!' };
   }
 
-  const { id } = validatedFields.data;
+  const { id } = validatedFields.data
 
   // Validation
-  const user = await currentUser();
+  const user = await currentUser()
   if (id == user?.id) {
-    throw new Error('Unable to remove your own user!'); 
+    throw new Error("Unable to remove your own user!")
     // return { error: 'Unable to remove your own user!' };
   }
 
@@ -58,9 +58,9 @@ export const deleteUser = async (values: z.infer<typeof deleteUserSchema>) => {
     where: {
       id,
     },
-  });
+  })
 
   // return { success: 'User Deleted Successfully!' };
 
-  revalidatePath('/');
-};
+  revalidatePath("/")
+}

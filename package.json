@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+		"preview": "next build && next start",
+		"typecheck": "tsc --noEmit",
+    "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
+		"format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.2.1",
@@ -55,6 +60,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/nprogress": "^0.2.3",

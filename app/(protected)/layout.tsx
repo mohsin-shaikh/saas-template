@@ -1,16 +1,16 @@
-import { Navbar } from "./_components/navbar";
+import { Navbar } from "./_components/navbar"
 
 interface ProtectedLayoutProps {
-  children: React.ReactNode;
-};
+  children: React.ReactNode
+}
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
-  return ( 
+  return (
     <div className="h-full w-full flex flex-col gap-y-10 items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-rose-100 to-teal-100">
       <Navbar />
       {children}
     </div>
-   );
+  )
 }
- 
-export default ProtectedLayout;
+
+export default ProtectedLayout

@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+
 // import { subDays } from "date-fns"
 
 // import { db } from "@/lib/db"
@@ -27,7 +28,6 @@ export default async function DashboardPage({
 }: {
   searchParams: any
 }) {
-  
   return (
     <>
       <div className="h-full flex-1 flex-col space-y-4">
@@ -50,9 +50,7 @@ export default async function DashboardPage({
               <CardTitle>Audit Logs</CardTitle>
               {/* <CardDescription>You made 265 sales this month.</CardDescription> */}
             </CardHeader>
-            <CardContent>
-              {/* <AuditLog data={auditLogData} /> */}
-            </CardContent>
+            <CardContent>{/* <AuditLog data={auditLogData} /> */}</CardContent>
           </Card>
         </div>
       </div>

@@ -1,28 +1,29 @@
 // FIXME: NOT WORKING.
-import { Button } from '@/components/ui/button';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import React from 'react';
+import React from "react"
+import { HamburgerMenuIcon } from "@radix-ui/react-icons"
+
+import { Button } from "@/components/ui/button"
 
 interface ILeftNavToggle {
-  isCollapsed: boolean;
-  setIsCollapsed: (value: boolean) => void;
+  isCollapsed: boolean
+  setIsCollapsed: (value: boolean) => void
 }
 
 function LeftNavToggle({ isCollapsed, setIsCollapsed }: ILeftNavToggle) {
   return (
     <Button
-      variant='outline'
-      size='icon'
+      variant="outline"
+      size="icon"
       onClick={() => {
-        setIsCollapsed(!isCollapsed);
+        setIsCollapsed(!isCollapsed)
         document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-          isCollapsed === true ? [4,96] : [20, 80]
-        )}`;
+          isCollapsed === true ? [4, 96] : [20, 80]
+        )}`
       }}
     >
-      <HamburgerMenuIcon className='h-4 w-4' />
+      <HamburgerMenuIcon className="h-4 w-4" />
     </Button>
-  );
+  )
 }
 
-export default LeftNavToggle;
+export default LeftNavToggle

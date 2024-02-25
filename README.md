@@ -68,7 +68,8 @@ This is a repository for SaaS Template - Advanced Guide (2024)
 
 ### Prerequisites
 
-**Node version 18.7.x**
+- **Node version 18.x.x**
+- **Postgres DB or MySQL DB**
 
 ### Cloning the repository
 
@@ -133,3 +134,4 @@ npm run dev
 - [ ] Table selection should reset on-page changes in the data table
 - [ ] Consolidate Server Action in a common folder
 - [ ] Settings pages are not up to the mark
+- [ ] Remove (protected) routes which are not in use

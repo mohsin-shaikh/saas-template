@@ -1,22 +1,19 @@
-"use client";
+"use client"
 
+import { LogOut, User } from "lucide-react"
+
+import { useCurrentUser } from "@/hooks/use-current-user"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-} from "@/components/ui/avatar";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { LogoutButton } from "@/components/auth/logout-button";
-import { LogOut, User } from "lucide-react";
+} from "@/components/ui/dropdown-menu"
+import { LogoutButton } from "@/components/auth/logout-button"
 
 export const UserButton = () => {
-  const user = useCurrentUser();
+  const user = useCurrentUser()
 
   return (
     <DropdownMenu>
@@ -37,5 +34,5 @@ export const UserButton = () => {
         </LogoutButton>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}

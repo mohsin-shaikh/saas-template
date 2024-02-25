@@ -1,25 +1,27 @@
-'use server';
+"use server"
 
-import { revalidatePath } from 'next/cache';
-import { faker } from '@faker-js/faker';
-import type { z } from 'zod';
+import { revalidatePath } from "next/cache"
+import { faker } from "@faker-js/faker"
+import { Task, TaskLabel, TaskPriority, TaskStatus } from "@prisma/client"
+import type { z } from "zod"
+
+import { db } from "@/lib/db"
+import { enumToArray } from "@/lib/helper"
+
 import type {
   updateTaskLabelSchema,
   updateTaskPrioritySchema,
   updateTaskStatusSchema,
-} from './validations';
-import { db } from '@/lib/db';
-import { Task, TaskLabel, TaskPriority, TaskStatus } from '@prisma/client';
-import { enumToArray } from '@/lib/helper';
+} from "./validations"
 
 export async function seedTasks({
   count = 100,
   reset = false,
 }: {
-  count?: number;
-  reset?: boolean;
+  count?: number
+  reset?: boolean
 }) {
-  const allTasks = [];
+  const allTasks = []
 
   for (let i = 0; i < count; i++) {
     allTasks.push({
@@ -30,26 +32,26 @@ export async function seedTasks({
         .replace(/^./, (letter) => letter.toUpperCase()),
       status:
         // @ts-expect-error
-        faker.helpers.shuffle<Task['status']>(enumToArray(TaskStatus))[0] ??
-        'todo',
+        faker.helpers.shuffle<Task["status"]>(enumToArray(TaskStatus))[0] ??
+        "todo",
       label:
         // @ts-expect-error
-        faker.helpers.shuffle<Task['label']>(enumToArray(TaskLabel))[0] ??
-        'bug',
+        faker.helpers.shuffle<Task["label"]>(enumToArray(TaskLabel))[0] ??
+        "bug",
       priority:
         // @ts-expect-error
-        faker.helpers.shuffle<Task['priority']>(enumToArray(TaskPriority))[0] ??
-        'low',
-    });
+        faker.helpers.shuffle<Task["priority"]>(enumToArray(TaskPriority))[0] ??
+        "low",
+    })
   }
 
-  reset && (await db.$executeRaw`TRUNCATE TABLE "Task" CASCADE`);
+  reset && (await db.$executeRaw`TRUNCATE TABLE "Task" CASCADE`)
 
-  console.log('📝 Inserting tasks', allTasks.length);
+  console.log("📝 Inserting tasks", allTasks.length)
 
   await db.task.createMany({
     data: allTasks,
-  });
+  })
 }
 
 export async function updateTaskLabel({
@@ -63,16 +65,16 @@ export async function updateTaskLabel({
     data: {
       label: label,
     },
-  });
+  })
 
-  revalidatePath('/');
+  revalidatePath("/")
 }
 
 export async function updateTaskStatus({
   id,
   status,
 }: z.infer<typeof updateTaskStatusSchema>) {
-  console.log('updateTaskStatusAction', id, status);
+  console.log("updateTaskStatusAction", id, status)
 
   await db.task.update({
     where: {
@@ -81,16 +83,16 @@ export async function updateTaskStatus({
     data: {
       status: status,
     },
-  });
+  })
 
-  revalidatePath('/');
+  revalidatePath("/")
 }
 
 export async function updateTaskPriority({
   id,
   priority,
 }: z.infer<typeof updateTaskPrioritySchema>) {
-  console.log('updatePriorityAction', id, priority);
+  console.log("updatePriorityAction", id, priority)
 
   await db.task.update({
     where: {
@@ -99,9 +101,9 @@ export async function updateTaskPriority({
     data: {
       priority: priority,
     },
-  });
+  })
 
-  revalidatePath('/');
+  revalidatePath("/")
 }
 
 export async function deleteTask(input: { id: string }) {
@@ -109,10 +111,10 @@ export async function deleteTask(input: { id: string }) {
     where: {
       id: input.id,
     },
-  });
+  })
 
   // Create a new task for the deleted one
   // await seedTasks({ count: 1 });
 
-  revalidatePath('/');
+  revalidatePath("/")
 }

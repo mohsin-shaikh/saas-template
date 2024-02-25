@@ -1,8 +1,8 @@
-import * as z from 'zod';
+import * as z from "zod"
 
 export const searchParamsSchema = z.object({
-  page: z.string().default('1'),
-  per_page: z.string().default('10'),
+  page: z.string().default("1"),
+  per_page: z.string().default("10"),
   sort: z.string().optional(),
   operator: z.string().optional(),
 
@@ -19,4 +19,4 @@ export const searchParamsSchema = z.object({
   // User
   role: z.string().optional(),
   email: z.string().optional(),
-});
+})

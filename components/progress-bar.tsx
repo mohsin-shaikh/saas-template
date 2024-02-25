@@ -6,7 +6,7 @@ import NProgress from "nprogress"
 type PushStateInput = [
   data: any,
   unused: string,
-  url?: string | URL | null | undefined
+  url?: string | URL | null | undefined,
 ]
 
 export default function ProgressBar() {

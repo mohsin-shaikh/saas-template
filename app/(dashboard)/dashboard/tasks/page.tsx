@@ -1,19 +1,19 @@
-import * as React from 'react';
-import type { SearchParams } from '@/types';
+import * as React from "react"
+import type { SearchParams } from "@/types"
 
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
+import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
 
-import { TasksTable } from './_components/tasks-table';
-import { getTasks } from './_lib/queries';
-import { seedTasks } from './_lib/actions';
+import { TasksTable } from "./_components/tasks-table"
+import { seedTasks } from "./_lib/actions"
+import { getTasks } from "./_lib/queries"
 
 export interface TaskPageProps {
-  searchParams: SearchParams;
+  searchParams: SearchParams
 }
 
 export default function TaskPage({ searchParams }: TaskPageProps) {
   // seedTasks({});
-  const tasksPromise = getTasks(searchParams);
+  const tasksPromise = getTasks(searchParams)
 
   return (
     <>
@@ -30,5 +30,5 @@ export default function TaskPage({ searchParams }: TaskPageProps) {
         <TasksTable tasksPromise={tasksPromise} />
       </React.Suspense>
     </>
-  );
+  )
 }
