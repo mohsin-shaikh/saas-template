@@ -17,6 +17,11 @@ export default function TaskPage({ searchParams }: TaskPageProps) {
 
   return (
     <>
+    <div className="h-full flex-1 flex-col space-y-4">
+      <div className="flex flex-row flex-wrap items-center justify-between space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight">Tasks</h2>
+        {/* <CreateModal /> */}
+      </div>
       <React.Suspense
         fallback={
           <DataTableSkeleton columnCount={4} filterableColumnCount={2} />
@@ -29,6 +34,7 @@ export default function TaskPage({ searchParams }: TaskPageProps) {
          */}
         <TasksTable tasksPromise={tasksPromise} />
       </React.Suspense>
+      </div>
     </>
   )
 }
