@@ -78,12 +78,13 @@ export function DashboardShell({
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          <div className={cn("h-full overflow-y-auto")}>
+          <div className={cn("h-full overflow-y-auto", "bg-muted")}>
             <div
               className={cn(
                 "sticky top-0 z-10",
                 "h-[52px]",
-                "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+                "bg-background",
+                // "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
                 "flex items-center justify-between px-4"
               )}
             >

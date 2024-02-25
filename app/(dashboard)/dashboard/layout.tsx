@@ -26,8 +26,10 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
         defaultLayout={defaultLayout}
         defaultCollapsed={defaultCollapsed}
       >
-        <main className={`flex min-h-full w-full`}>
-          <div className="w-full bg-background p-4">{children}</div>
+        <main className={`flex min-h-full w-full p-4`}>
+          <div className="w-full bg-background p-4 rounded shadow">
+            {children}
+          </div>
         </main>
       </DashboardShell>
     </>
