@@ -136,6 +136,12 @@ npm run dev
 - [ ] Settings pages are not up to the mark
 - [ ] Remove (protected) routes which are not in use
 
+## Special Thanks
+
+- [Antonio Erdeljac](https://github.com/AntonioErdeljac)
+- [Sadman Sakib](https://github.com/sadmann7)
+- [Arvind Iyer](https://github.com/arvind-iyer-2001)
+
 ## License
 
 Licensed under the [MIT license](https://github.com/mohsin-shaikh/saas-template/blob/main/LICENSE.md).
