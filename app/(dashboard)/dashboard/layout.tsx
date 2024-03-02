@@ -1,5 +1,3 @@
-import { cookies } from "next/headers"
-
 import { DashboardShell } from "./_components/dashboard-shell"
 
 interface DashboardLayoutProps {

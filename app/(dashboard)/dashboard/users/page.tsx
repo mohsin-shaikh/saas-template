@@ -1,7 +1,9 @@
 import * as React from "react"
 import type { SearchParams } from "@/types"
 
+import { currentUser } from "@/lib/auth"
 import { DataTableSkeleton } from "@/components/data-table/data-table-skeleton"
+import { Error405 } from "@/components/error-405"
 
 import CreateModal from "./_components/create-modal"
 import { UsersTable } from "./_components/users-table"
@@ -11,7 +13,12 @@ export interface UsersPageProps {
   searchParams: SearchParams
 }
 
-export default function UsersPage({ searchParams }: UsersPageProps) {
+const UsersPage = async ({ searchParams }: UsersPageProps) => {
+  const user = await currentUser()
+  if (user?.role !== "ADMIN") {
+    return <Error405 />
+  }
+
   const usersPromise = getUsers(searchParams)
 
   return (
@@ -37,3 +44,5 @@ export default function UsersPage({ searchParams }: UsersPageProps) {
     </>
   )
 }
+
+export default UsersPage
