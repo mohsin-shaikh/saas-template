@@ -1,8 +1,20 @@
 import { Poppins } from "next/font/google"
+import Image from "next/image"
+import Link from "next/link"
 
+import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Announcement } from "@/components/announcement"
 import { LoginButton } from "@/components/auth/login-button"
+import { Icons } from "@/components/icons"
+import { ModeToggle } from "@/components/mode-toggle"
+import {
+  PageActions,
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading,
+} from "@/components/page-header"
 
 const font = Poppins({
   subsets: ["latin"],
@@ -11,25 +23,69 @@ const font = Poppins({
 
 export default function Home() {
   return (
-    <main className="flex h-full flex-col items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-      <div className="space-y-6 text-center">
-        <h1
+    <div className="">
+      <div className="container relative">
+        <div
           className={cn(
-            "text-6xl font-semibold text-white drop-shadow-md",
-            font.className
+            "sticky top-4 z-10",
+            "h-[52px]",
+            "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+            "flex items-center justify-between",
+            "border rounded-full px-4 mt-4 shadow"
           )}
         >
-          🔐 Auth
-        </h1>
-        <p className="text-white text-lg">A simple authentication service</p>
-        <div>
-          <LoginButton asChild>
-            <Button variant="secondary" size="lg">
-              Sign in
-            </Button>
-          </LoginButton>
+          <div className="flex justify-center items-center">
+            <Icons.logo className="w-4 h-4 mr-2" />
+            SaaS Template
+          </div>
+          <div className="flex items-center space-x-4 lg:ml-auto">
+            <ModeToggle />
+          </div>
         </div>
+        <PageHeader>
+          <Announcement />
+          <PageHeaderHeading>Build your SaaS Application</PageHeaderHeading>
+          <PageHeaderDescription>
+            Beautifully designed SaaS Application. Accessible. Customizable.
+            Open Source.
+          </PageHeaderDescription>
+          <PageActions>
+            <Link href="/dashboard" className={cn(buttonVariants())}>
+              Get Started
+            </Link>
+            <Link
+              target="_blank"
+              rel="noreferrer"
+              href={siteConfig.links.github}
+              className={cn(buttonVariants({ variant: "outline" }))}
+            >
+              <Icons.gitHub className="mr-2 h-4 w-4" />
+              GitHub
+            </Link>
+          </PageActions>
+        </PageHeader>
+        <section
+          className={cn(
+            "overflow-hidden rounded-lg border bg-background shadow-md md:shadow-xl flex justify-center items-center",
+            "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-rose-100 to-teal-100"
+          )}
+        >
+          <Image
+            src="/dark.png"
+            width={1280}
+            height={727}
+            alt="Mail"
+            className="hidden dark:block"
+          />
+          <Image
+            src="/light.png"
+            width={1280}
+            height={727}
+            alt="Mail"
+            className="block dark:hidden"
+          />
+        </section>
       </div>
-    </main>
+    </div>
   )
 }

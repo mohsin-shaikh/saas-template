@@ -1,11 +1,3 @@
-// Site
-export type SiteConfig = {
-  name: string
-  description: string
-  dateFormate: string
-  url: string
-}
-
 // Data Table
 export interface SearchParams {
   [key: string]: string | string[] | undefined
