@@ -1,6 +1,6 @@
 # SaaS Template - Advanced Guide (2024)
 
-![image](https://github.com/mohsin-shaikh/saas-template/blob/main/public/saas-template.png?raw=true)
+![image](https://github.com/mohsin-shaikh/saas-template/blob/main/public/light.png?raw=true)
 
 This is a repository for SaaS Template - Advanced Guide (2024)
 
