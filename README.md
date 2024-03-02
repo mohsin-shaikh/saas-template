@@ -135,3 +135,7 @@ npm run dev
 - [ ] Consolidate Server Action in a common folder
 - [ ] Settings pages are not up to the mark
 - [ ] Remove (protected) routes which are not in use
+
+## License
+
+Licensed under the [MIT license](https://github.com/mohsin-shaikh/saas-template/blob/main/LICENSE.md).
