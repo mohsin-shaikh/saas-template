@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Row } from "@tanstack/react-table"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import * as z from "zod"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
+
+import { updateUser } from "../_lib/actions"
 
 type UserFormValues = z.infer<typeof updateUserSchema>
 
@@ -46,29 +48,28 @@ export function UpdateForm<TData>({ setIsOpen, row }: FormType<TData>) {
     },
     mode: "onChange",
   })
+  // @ts-expect-error
+  const rowId = row.original?.id
 
   async function onSubmit(data: UserFormValues) {
     setLoading(true)
-    const response = await fetch(`/api/users/${row.getValue("id")}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
 
-    if (!response?.ok) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your post was not created. Please try again.",
-        variant: "destructive",
-      })
+    if (!rowId) {
+      toast("Invalid Record ID!")
+      setLoading(false)
+      return false
     }
 
-    toast({
-      title: "Success",
-      description: "Your message has been sent.",
-    })
+    const response = await updateUser(rowId, data)
+
+    if (response?.error) {
+      toast(response.error)
+      setLoading(false)
+      return false
+    }
+
+    toast(response.success)
+
     // This forces a cache invalidation.
     router.refresh()
 

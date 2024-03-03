@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createUser } from "@/actions/users"
+import { createUser } from "../_lib/actions"
 import { createUserSchema } from "@/schemas/user"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"

@@ -5,11 +5,6 @@ import type {
   DataTableSearchableColumn,
 } from "@/types"
 import { User, UserRole } from "@prisma/client"
-import {
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-} from "@radix-ui/react-icons"
 import { type ColumnDef } from "@tanstack/react-table"
 
 import { enumToKeyValueArray } from "@/lib/helper"
@@ -17,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header"
 
 import UserTableRowActions from "./users-table-row-actions"
+import { CircleIcon, ShieldCheckIcon, UserIcon } from "lucide-react"
 
 export function fetchUsersTableColumnDefs(
   isPending: boolean,
@@ -77,12 +73,12 @@ export function fetchUsersTableColumnDefs(
         return (
           <div className="flex items-center">
             {role.value === "USER" ? (
-              <CrossCircledIcon
+              <UserIcon
                 className="mr-2 size-4 text-muted-foreground"
                 aria-hidden="true"
               />
             ) : role.value === "ADMIN" ? (
-              <CheckCircledIcon
+              <ShieldCheckIcon
                 className="mr-2 size-4 text-muted-foreground"
                 aria-hidden="true"
               />

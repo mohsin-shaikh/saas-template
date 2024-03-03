@@ -1,41 +1,95 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { deleteUserSchema } from "@/schemas/user"
-import type { z } from "zod"
+import { getUserByEmail } from "@/data/user"
+import {
+  createUserSchema,
+  deleteUserSchema,
+  updateUserSchema,
+} from "@/schemas/user"
+import bcrypt from "bcryptjs"
+import * as z from "zod"
 
 import { currentUser } from "@/lib/auth"
 import { db } from "@/lib/db"
+import { sendVerificationEmail } from "@/lib/mail"
+import { generateVerificationToken } from "@/lib/tokens"
 
-import type { updateUserRoleSchema } from "./validations"
+export const createUser = async (values: z.infer<typeof createUserSchema>) => {
+  const validatedFields = createUserSchema.safeParse(values)
 
-export async function updateUserRole({
-  id,
-  role,
-}: z.infer<typeof updateUserRoleSchema>) {
-  console.log("updateUserRoleSchemaAction", id, role)
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" }
+  }
 
-  await db.user.update({
-    where: {
-      id: id,
-    },
+  const { email, password, name, role } = validatedFields.data
+  const hashedPassword = await bcrypt.hash(password, 10)
+
+  const existingUser = await getUserByEmail(email)
+
+  if (existingUser) {
+    return { error: "Email already in use!" }
+  }
+
+  await db.user.create({
     data: {
-      role: role,
+      name,
+      email,
+      password: hashedPassword,
+      role,
     },
   })
 
-  revalidatePath("/")
+  // const verificationToken = await generateVerificationToken(email);
+  // await sendVerificationEmail(
+  //   verificationToken.email,
+  //   verificationToken.token,
+  // );
+
+  return { success: "User Create Successfully!" }
 }
 
-// export async function deleteUser(input: { id: string }) {
-//   await db.user.delete({
-//     where: {
-//       id: input.id,
-//     },
-//   });
+export const updateUser = async (
+  id: string,
+  values: z.infer<typeof updateUserSchema>
+) => {
+  const validatedFields = updateUserSchema.safeParse(values)
 
-//   revalidatePath('/');
-// }
+  if (!validatedFields.success) {
+    return { error: "Invalid fields!" }
+  }
+
+  const { email, newPassword, name, role } = validatedFields.data
+
+  const duplicateEmailCount = await db.user.count({
+    where: {
+      id: { not: id },
+      email: email,
+    },
+  })
+
+  if (duplicateEmailCount > 0) {
+    return { error: "Email already in use!" }
+  }
+
+  await db.user.update({
+    where: { id: id },
+    data: {
+      name,
+      email,
+      ...(newPassword && { password: await bcrypt.hash(newPassword, 10) }),
+      role,
+    },
+  })
+
+  // const verificationToken = await generateVerificationToken(email);
+  // await sendVerificationEmail(
+  //   verificationToken.email,
+  //   verificationToken.token,
+  // );
+
+  return { success: "User Update Successfully!" }
+}
 
 export const deleteUser = async (values: z.infer<typeof deleteUserSchema>) => {
   const validatedFields = deleteUserSchema.safeParse(values)
